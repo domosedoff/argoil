@@ -1,17 +1,100 @@
+/* src/app/globals.css */
+
+/* ----- БАЗОВЫЕ ДИРЕКТИВЫ TAILWIND ----- */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: var(--font-family-sans);
-  color: var(--color-brand-dark);
+/* ----- КАСТОМНЫЕ БАЗОВЫЕ СТИЛИ ----- */
+@layer base {
+  /* Применяем основной шрифт и цвет текста ко всему документу */
+  body {
+    @apply font-sans text-base leading-relaxed text-base-content bg-base-100 antialiased;
+    /* Добавил leading-relaxed для лучшей читаемости */
+  }
+
+  /* Применяем шрифт для заголовков */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+  }
+
+  /* Базовый стиль для ссылок */
+  a:not(.btn) {
+    /* Применяем ко всем ссылкам, КРОМЕ кнопок (.btn) */
+    @apply text-primary decoration-primary/50 hover:text-primary-focus hover:underline hover:decoration-primary/70 transition-colors duration-200;
+    /* Чуть изменил hover-подчеркивание */
+  }
+
+  /* Стилизация ссылок внутри .prose (если нужно переопределить) */
+  /* Эти стили будут применены на странице /clients */
+  .prose a,
+  .prose a:visited {
+    @apply text-primary decoration-primary/50 hover:text-primary-focus no-underline hover:underline transition-colors duration-200 font-medium;
+    /* Добавил font-medium */
+  }
+  .prose strong {
+    @apply text-base-content;
+  } /* Цвет для strong */
+  .prose ul > li::marker {
+    @apply text-muted;
+  } /* Цвет маркеров списка */
+  .prose ol > li::marker {
+    @apply text-muted;
+  }
+  .prose hr {
+    @apply border-base-300;
+  } /* Цвет разделителей */
+  .prose code {
+    @apply text-primary font-medium;
+  }
+  .prose a code {
+    @apply text-primary;
+  }
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-family-heading);
+/* ----- КАСТОМНЫЕ КОМПОНЕНТЫ ----- */
+@layer components {
+  /* --- Кнопки --- */
+  .btn {
+    @apply inline-block rounded-md px-5 py-2.5 text-center font-medium transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border border-transparent;
+    /* Добавил transition-all и border-transparent */
+  }
+  .btn:hover {
+    @apply transform scale-[1.02]; /* Легкое увеличение при наведении */
+  }
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-focus focus:ring-primary shadow-sm hover:shadow-md; /* Добавил тень */
+  }
+  .btn-secondary {
+    @apply bg-base-200 text-base-content hover:bg-base-300 focus:ring-primary shadow-sm hover:shadow;
+  }
+  .btn-outline-primary {
+    @apply border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary;
+    /* hover:shadow-sm */
+  }
+  .btn-ghost {
+    @apply text-primary hover:bg-primary/10 focus:ring-primary;
+  }
+  /* Размеры кнопок */
+  .btn-sm {
+    @apply px-3 py-1.5 text-sm rounded;
+  }
+  .btn-lg {
+    @apply px-8 py-3 text-lg rounded-lg;
+  } /* Увеличил отступы и скругление */
+
+  /* --- Карточки --- */
+  .card {
+    @apply bg-base-100 rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 ease-in-out overflow-hidden border border-transparent hover:border-primary/20;
+    /* Добавил hover:shadow-lg и transition-all */
+  }
+  .card-bordered {
+    /* Дополнительный стиль для карточек с видимой рамкой */
+    @apply border border-base-300;
+  }
 }

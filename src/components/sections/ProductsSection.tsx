@@ -1,11 +1,11 @@
 // src/components/sections/ProductsSection.tsx
 import Link from "next/link";
-import React from "react"; // Импортируем React для иконок-плейсхолдеров
+import React from "react";
 
-// Иконка-плейсхолдер (можно заменить на реальные иконки позже, например из react-icons)
+// Иконка (оставляем как есть или заменяем на react-icons)
 const GasIcon = () => (
   <svg
-    className="w-8 h-8 text-primary mb-3" // <-- Уменьшили размер (было w-12 h-12) и немного отступ снизу (mb-3)
+    className="w-8 h-8 text-primary mb-4"
     fill="none"
     stroke="currentColor"
     viewBox="0 0 24 24"
@@ -20,15 +20,15 @@ const GasIcon = () => (
   </svg>
 );
 
-// Пример данных для продуктов
+// Данные (оставляем как есть)
 const products = [
   {
     id: 1,
     name: "СУГ (Пропан-Бутан)",
     description:
       "Сжиженный углеводородный газ - универсальное и экологичное топливо для промышленности и бытовых нужд.",
-    icon: <GasIcon />, // Используем плейсхолдер
-    link: "/products#sug", // Пример ссылки на якорь на странице продукции
+    icon: <GasIcon />,
+    link: "/products#sug",
   },
   {
     id: 2,
@@ -46,56 +46,82 @@ const products = [
     icon: <GasIcon />,
     link: "/products#butan",
   },
-  // Можно добавить еще 1-3 продукта для главной страницы
 ];
 
 const ProductsSection = () => {
   return (
-    <section className="py-16 md:py-24 bg-gray-50">
-      {" "}
-      {/* Слегка серый фон для отделения */}
+    // Используем фон base-200 (очень светлый серый)
+    <section className="py-16 md:py-24 bg-base-200">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 md:mb-16">
           <span className="text-primary font-semibold text-sm uppercase tracking-wider mb-2 block">
             Наша продукция
           </span>
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-brand-dark">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-base-content">
             Основные виды поставляемого газа
           </h2>
         </div>
 
-        {/* Сетка для карточек продуктов */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12 md:mb-16">
+        {/* Сетка карточек */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-16">
           {products.map((product) => (
+            // --- АЛЬТЕРНАТИВНЫЙ СТИЛЬ КАРТОЧКИ ---
             <div
               key={product.id}
-              className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow flex flex-col items-center text-center"
+              className="card border border-transparent hover:border-primary/30 flex flex-col text-left p-6 md:p-8 group"
             >
-              {product.icon}
-              <h3 className="text-xl font-heading font-semibold text-brand-dark mb-2">
+              {" "}
+              {/* Изменен стиль, добавлен group */}
+              {/* Иконка */}
+              <div className="mb-4">{product.icon}</div>
+              {/* Заголовок */}
+              <h3 className="text-xl font-heading font-semibold text-base-content mb-2 group-hover:text-primary transition-colors duration-300">
+                {" "}
+                {/* Цвет меняется при наведении на карточку */}
                 {product.name}
               </h3>
-              <p className="text-gray-600 mb-4 flex-grow">
+              {/* Описание */}
+              <p className="text-muted mb-4 flex-grow text-sm leading-relaxed">
                 {" "}
-                {/* flex-grow чтобы текст занимал место */}
+                {/* Добавил leading-relaxed */}
                 {product.description}
               </p>
-              <Link
-                href={product.link}
-                className="text-primary hover:text-accent font-medium transition-colors mt-auto" // mt-auto прижимает ссылку к низу карточки
-              >
-                Подробнее →
-              </Link>
+              {/* Ссылка "Подробнее" */}
+              <div className="mt-auto">
+                {" "}
+                {/* Прижимаем ссылку к низу */}
+                <Link
+                  href={product.link}
+                  className="inline-flex items-center text-primary hover:text-primary-focus font-medium transition-colors text-sm group-hover:underline" /* Подчеркивание при наведении на карточку */
+                >
+                  Подробнее
+                  {/* Стрелка появляется при наведении на карточку */}
+                  <svg
+                    className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 5l7 7-7 7"
+                    ></path>
+                  </svg>
+                </Link>
+              </div>
             </div>
+            // --- КОНЕЦ АЛЬТЕРНАТИВНОГО СТИЛЯ КАРТОЧКИ ---
           ))}
         </div>
 
-        {/* Кнопка для перехода на основную страницу продукции */}
+        {/* Кнопка */}
         <div className="text-center">
-          <Link
-            href="/products"
-            className="inline-block bg-primary hover:bg-opacity-80 text-white font-semibold py-3 px-8 rounded-md transition duration-300 ease-in-out"
-          >
+          <Link href="/products" className="btn btn-outline-primary">
+            {" "}
+            {/* Сделал контурной */}
             Смотреть всю продукцию
           </Link>
         </div>

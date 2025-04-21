@@ -1,9 +1,10 @@
 // src/app/clients/page.tsx
 import React from "react";
-import Link from "next/link"; // Для ссылок
+import Link from "next/link";
+// Импортируем иконку для ссылок на скачивание
+import { FaDownload } from "react-icons/fa";
 
-// Данные-заглушки для кнопок/ссылок с главной страницы (для заголовков секций)
-// TODO: Заменить на данные из файла, когда он будет предоставлен
+// Данные clientLinks оставляем как есть
 const clientLinks = [
   {
     id: "how-to-start",
@@ -33,12 +34,17 @@ export default function ClientsPage() {
   return (
     <>
       {/* Верхняя секция с заголовком */}
+      {/* Оставляем градиент для выразительности */}
       <section className="bg-gradient-to-r from-brand-dark via-primary to-accent py-12 md:py-16 text-white">
         <div className="container mx-auto px-4 text-center">
+          {/* Используем новые размеры */}
           <h1 className="text-4xl md:text-5xl font-heading font-bold">
             Клиентам и Партнерам
           </h1>
-          <p className="text-lg md:text-xl text-gray-200 mt-2 max-w-2xl mx-auto">
+          {/* Используем text-lg */}
+          <p className="text-lg md:text-xl text-gray-200 mt-2 max-w-3xl mx-auto">
+            {" "}
+            {/* Увеличил max-w */}
             Информация для начала и ведения успешного сотрудничества с нашей
             компанией.
           </p>
@@ -46,19 +52,21 @@ export default function ClientsPage() {
       </section>
 
       {/* Основной контент страницы */}
-      <section className="py-16 md:py-20 bg-white">
+      {/* Используем фон base-100 (белый) */}
+      <section className="py-16 md:py-20 bg-base-100">
+        {/* Ограничиваем ширину для читаемости */}
         <div className="container mx-auto px-4 max-w-4xl">
-          {" "}
-          {/* Ограничим ширину для лучшей читаемости */}
           {/* Секция: Как стать клиентом */}
-          <div id="how-to-start" className="mb-12 scroll-mt-20">
-            <h2 className="text-3xl font-heading font-bold text-brand-dark mb-4">
+          <div id="how-to-start" className="mb-16 scroll-mt-20">
+            {" "}
+            {/* Увеличил mb */}
+            {/* Используем новые размеры и цвета */}
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-base-content mb-6">
               {clientLinks.find((link) => link.id === "how-to-start")?.text ||
                 "Как стать клиентом?"}
             </h2>
-            <div className="prose prose-lg max-w-none text-gray-700">
-              {" "}
-              {/* Используем Tailwind Typography для стилизации текста */}
+            {/* Настраиваем стили prose для соответствия палитре */}
+            <div className="prose prose-lg max-w-none prose-p:text-muted prose-li:text-muted prose-strong:text-base-content prose-a:text-primary hover:prose-a:text-primary-focus">
               <p>
                 {/* TODO: Добавить текст */}
                 Начать сотрудничество с нами просто. Мы работаем как с
@@ -89,13 +97,14 @@ export default function ClientsPage() {
               </p>
             </div>
           </div>
+
           {/* Секция: Условия поставок */}
-          <div id="delivery-terms" className="mb-12 scroll-mt-20">
-            <h2 className="text-3xl font-heading font-bold text-brand-dark mb-4">
+          <div id="delivery-terms" className="mb-16 scroll-mt-20">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-base-content mb-6">
               {clientLinks.find((link) => link.id === "delivery-terms")?.text ||
                 "Условия поставок"}
             </h2>
-            <div className="prose prose-lg max-w-none text-gray-700">
+            <div className="prose prose-lg max-w-none prose-p:text-muted prose-li:text-muted prose-strong:text-base-content prose-a:text-primary hover:prose-a:text-primary-focus">
               <p>
                 {/* TODO: Добавить текст */}
                 Мы предлагаем гибкие условия поставок, адаптированные под нужды
@@ -122,61 +131,61 @@ export default function ClientsPage() {
               </ul>
             </div>
           </div>
+
           {/* Секция: Типовые договоры */}
-          <div id="contracts" className="mb-12 scroll-mt-20">
-            <h2 className="text-3xl font-heading font-bold text-brand-dark mb-4">
+          <div id="contracts" className="mb-16 scroll-mt-20">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-base-content mb-6">
               {clientLinks.find((link) => link.id === "contracts")?.text ||
                 "Типовые договоры"}
             </h2>
-            <div className="prose prose-lg max-w-none text-gray-700">
+            <div className="prose prose-lg max-w-none prose-p:text-muted prose-li:text-muted prose-strong:text-base-content prose-a:text-primary hover:prose-a:text-primary-focus">
               <p>
                 {/* TODO: Добавить текст */}
                 Для вашего удобства мы предоставляем образцы типовых договоров
-                поставки. Вы можете ознакомиться с ними, чтобы понять основные
-                условия сотрудничества. Обратите внимание, что финальный договор
-                может содержать индивидуальные условия, согласованные с вашим
-                менеджером.
+                поставки...
               </p>
-              {/* TODO: Добавить ссылки на скачивание файлов */}
-              <ul className="list-none pl-0">
+              {/* Используем flex для иконки и ссылки */}
+              <ul className="list-none pl-0 space-y-3">
                 <li>
                   <a
                     href="/docs/contract-sample-legal.pdf"
                     download
-                    className="text-primary hover:underline"
+                    className="inline-flex items-center text-primary hover:text-primary-focus group"
                   >
-                    Скачать типовой договор для юридических лиц (.pdf)
+                    <FaDownload className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />{" "}
+                    {/* Иконка */}
+                    <span>
+                      Скачать типовой договор для юридических лиц (.pdf)
+                    </span>
                   </a>
                 </li>
                 <li>
                   <a
                     href="/docs/contract-sample-ip.pdf"
                     download
-                    className="text-primary hover:underline"
+                    className="inline-flex items-center text-primary hover:text-primary-focus group"
                   >
-                    Скачать типовой договор для ИП (.pdf)
+                    <FaDownload className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+                    <span>Скачать типовой договор для ИП (.pdf)</span>
                   </a>
                 </li>
               </ul>
             </div>
           </div>
-          {/* Секция: Стандарты качества (ссылка на раздел Продукция) */}
-          <div id="quality" className="mb-12 scroll-mt-20">
-            <h2 className="text-3xl font-heading font-bold text-brand-dark mb-4">
+
+          {/* Секция: Стандарты качества */}
+          <div id="quality" className="mb-16 scroll-mt-20">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-base-content mb-6">
               {clientLinks.find((link) => link.id === "quality")?.text ||
                 "Стандарты качества продукции"}
             </h2>
-            <div className="prose prose-lg max-w-none text-gray-700">
+            <div className="prose prose-lg max-w-none prose-p:text-muted prose-li:text-muted prose-strong:text-base-content prose-a:text-primary hover:prose-a:text-primary-focus">
               <p>
                 Вся поставляемая нами продукция соответствует действующим ГОСТам
-                и стандартам качества РФ. Подробную информацию о стандартах и
-                сертификатах вы можете найти в разделе{" "}
-                <Link href="/products">Продукция</Link> или запросить у вашего
-                менеджера.
+                и стандартам качества РФ...
               </p>
             </div>
           </div>
-          {/* Можно добавить другие релевантные секции */}
         </div>
       </section>
     </>

@@ -1,0 +1,11 @@
+
+# public/robots.txt
+User-agent: *
+Allow: /
+
+# Запретить индексацию служебных папок Next.js (на всякий случай)
+Disallow: /_next/
+Disallow: /api/
+
+# TODO: Добавить адрес карты сайта после генерации
+# Sitemap: https://argoil.complexmedia.ru/sitemap.xml
