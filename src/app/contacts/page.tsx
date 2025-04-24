@@ -1,186 +1,153 @@
 // src/app/contacts/page.tsx
+"use client";
+
 import React from "react";
-// Убедитесь, что путь импорта карты правильный
+// Убедитесь, что путь импорта карты правильный (ui или common)
 import YandexMap from "@/components/ui/YandexMap";
-// Импортируем компонент формы
 import ContactForm from "@/components/forms/ContactForm";
+import {
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaEnvelope,
+  FaClock,
+} from "react-icons/fa";
+import { useLocale } from "@/context/LocaleContext"; // Наш хук
+import { AbstractIntlMessages } from "next-intl"; // Тип
 
-// Определяем тип для контактной информации
-interface ContactInfo {
-  address: string;
-  phone: string;
-  phoneLink: string;
-  email: string;
-  workingHours: string;
-  mapCenter: [number, number]; // Тип кортежа
-  placemarkCoords: [number, number]; // Тип кортежа
-}
-
-// --- ДАННЫЕ ---
-// TODO: Заменить на реальные данные вашей компании
-const contactInfo: ContactInfo = {
-  address: "123456, г. Москва, ул. Центральная, д. 1, офис 101",
-  phone: "+7 (495) 123-45-67",
-  phoneLink: "tel:+74951234567",
-  email: "info@gaz-company.ru",
-  workingHours: "Пн-Пт: 9:00 - 18:00, Сб-Вс: выходной",
-  // Координаты центра Москвы (ЗАМЕНИТЕ НА КООРДИНАТЫ ВАШЕГО ОФИСА)
-  mapCenter: [55.751244, 37.618423],
-  // Координаты метки на карте (ЗАМЕНИТЕ НА КООРДИНАТЫ ВАШЕГО ОФИСА)
-  placemarkCoords: [55.751244, 37.618423],
+// --- Функция getTranslation ---
+const getTranslation = (
+  messages: AbstractIntlMessages,
+  ns: string,
+  key: string,
+  fb: string
+): string => {
+  if (typeof messages === "object" && messages !== null && messages[ns]) {
+    const nsMessages = messages[ns] as AbstractIntlMessages;
+    const keys = key.split(".");
+    let current: unknown = nsMessages;
+    for (const k of keys) {
+      if (current && typeof current === "object" && k in current) {
+        current = (current as Record<string, unknown>)[k];
+      } else {
+        current = undefined;
+        break;
+      }
+    }
+    if (typeof current === "string" && current.trim() !== "") return current;
+  }
+  return fb;
 };
 
-// --- ИКОНКИ ---
-const LocationIcon = () => (
-  <svg
-    className="w-5 h-5 mr-2 text-primary inline flex-shrink-0"
-    fill="currentColor"
-    viewBox="0 0 20 20"
-  >
-    <path
-      fillRule="evenodd"
-      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-      clipRule="evenodd"
-    ></path>
-  </svg>
-);
-const PhoneIcon = () => (
-  <svg
-    className="w-5 h-5 mr-2 text-primary inline flex-shrink-0"
-    fill="currentColor"
-    viewBox="0 0 20 20"
-  >
-    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
-  </svg>
-);
-const MailIcon = () => (
-  <svg
-    className="w-5 h-5 mr-2 text-primary inline flex-shrink-0"
-    fill="currentColor"
-    viewBox="0 0 20 20"
-  >
-    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-  </svg>
-);
-const ClockIcon = () => (
-  <svg
-    className="w-5 h-5 mr-2 text-primary inline flex-shrink-0"
-    fill="currentColor"
-    viewBox="0 0 20 20"
-  >
-    <path
-      fillRule="evenodd"
-      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-      clipRule="evenodd"
-    ></path>
-  </svg>
-);
+// --- Данные контактов (статичные) ---
+const contactData = {
+  address: "123456, г. Москва, ул. Центральная, д. 1, офис 101", // TODO: Заменить
+  phone: "+7 (495) 123-45-67", // TODO: Заменить
+  phoneLink: "tel:+74951234567",
+  email: "info@argoil.complexmedia.ru", // TODO: Заменить
+  workingHoursStatic: "Пн-Пт: 9:00 - 18:00, Сб-Вс: выходной", // TODO: Заменить?
+  mapCenter: [55.751244, 37.618423] as [number, number], // TODO: Заменить координаты
+  placemarkCoords: [55.751244, 37.618423] as [number, number], // TODO: Заменить координаты
+};
 
-// --- КОМПОНЕНТ СТРАНИЦЫ ---
+// --- Компонент страницы ---
 export default function ContactsPage() {
-  // Проверка наличия API ключа (опционально, для отладки в консоли сервера)
-  if (
-    typeof window === "undefined" &&
-    !process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY
-  ) {
-    // Проверяем только на сервере
-    console.warn(
-      "ВНИМАНИЕ: API ключ Яндекс.Карт (NEXT_PUBLIC_YANDEX_MAPS_API_KEY) не найден в .env.local. Карта может не отображаться или работать некорректно."
-    );
-  }
+  const { messages } = useLocale(); // Получаем сообщения
+
+  // Обертка для переводов
+  const t = (key: string, fallback: string) =>
+    getTranslation(messages, "ContactsPage", key, fallback);
 
   return (
     <>
-      {/* --- ШАПКА СТРАНИЦЫ --- */}
-      <section className="bg-gray-100 py-12 md:py-16">
+      {/* Шапка */}
+      <section className="bg-base-200 py-16 md:py-20">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-dark">
-            Контакты
+          <h1 className="text-4xl md:text-5xl font-heading font-bold text-base-content">
+            {t("page_title", "Контакты")}
           </h1>
-          <p className="text-lg md:text-xl text-gray-600 mt-2 max-w-2xl mx-auto">
-            Свяжитесь с нами любым удобным способом или посетите наш офис.
+          <p className="text-lg md:text-xl text-muted mt-3 max-w-3xl mx-auto">
+            {t(
+              "page_subtitle",
+              "Мы всегда на связи! Свяжитесь с нами любым удобным для вас способом или посетите наш офис."
+            )}
           </p>
         </div>
       </section>
 
-      {/* --- ОСНОВНАЯ СЕКЦИЯ (ИНФО + КАРТА) --- */}
-      <section className="py-16 md:py-20 bg-white">
+      {/* Основная секция */}
+      <section className="py-24 md:py-32 bg-base-100">
         <div className="container mx-auto px-4">
-          {/* Используем сетку для разделения на 2 колонки на больших экранах */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            {/* Левая колонка: Контактная информация и форма */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-16 items-start">
+            {/* Левая колонка */}
             <div>
-              <h2 className="text-3xl font-heading font-bold text-brand-dark mb-6">
-                Наши координаты
+              <h2 className="text-3xl font-heading font-bold text-base-content mb-6">
+                {t("coordinates_title", "Наши координаты")}
               </h2>
-              {/* Блок с контактами */}
-              <div className="space-y-4 text-lg text-gray-700 mb-10">
-                {/* Используем flex для выравнивания иконки и текста */}
+              <div className="space-y-5 text-lg text-base-content mb-10">
                 <p className="flex items-start">
-                  {" "}
-                  {/* items-start если текст длинный */}
-                  <LocationIcon />
+                  <FaMapMarkerAlt className="w-5 h-5 mr-3 mt-1 text-primary flex-shrink-0" />
                   <span>
-                    <strong>Адрес:</strong> {contactInfo.address}
+                    <strong>{t("address_label", "Адрес")}:</strong>{" "}
+                    <span className="text-muted">{contactData.address}</span>
                   </span>
                 </p>
                 <p className="flex items-center">
-                  <PhoneIcon />
+                  <FaPhoneAlt className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
                   <span>
-                    <strong>Телефон:</strong>{" "}
+                    <strong>{t("phone_label", "Телефон")}:</strong>{" "}
                     <a
-                      href={contactInfo.phoneLink}
-                      className="text-primary hover:underline ml-1"
+                      href={contactData.phoneLink}
+                      className="text-primary hover:text-primary-focus ml-1"
                     >
-                      {contactInfo.phone}
+                      {contactData.phone}
                     </a>
                   </span>
                 </p>
                 <p className="flex items-center">
-                  <MailIcon />
+                  <FaEnvelope className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
                   <span>
-                    <strong>Email:</strong>{" "}
+                    <strong>{t("email_label", "Email")}:</strong>{" "}
                     <a
-                      href={`mailto:${contactInfo.email}`}
-                      className="text-primary hover:underline ml-1"
+                      href={`mailto:${contactData.email}`}
+                      className="text-primary hover:text-primary-focus ml-1"
                     >
-                      {contactInfo.email}
+                      {contactData.email}
                     </a>
                   </span>
                 </p>
                 <p className="flex items-center">
-                  <ClockIcon />
+                  <FaClock className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
                   <span>
-                    <strong>Часы работы:</strong> {contactInfo.workingHours}
+                    <strong>{t("hours_label", "Часы работы")}:</strong>{" "}
+                    <span className="text-muted">
+                      {contactData.workingHoursStatic}
+                    </span>
                   </span>
                 </p>
               </div>
 
-              {/* Блок Обратная связь с формой */}
-              <div className="pt-8 border-t">
-                <h3 className="text-2xl font-heading font-semibold text-brand-dark mb-4">
-                  Обратная связь
+              {/* Форма обратной связи */}
+              <div className="pt-8 border-t border-base-300">
+                <h3 className="text-2xl font-heading font-semibold text-base-content mb-4">
+                  {t("feedback_title", "Обратная связь")}
                 </h3>
-                <p className="text-gray-600 mb-4">
-                  Если у вас остались вопросы или вы хотите сделать запрос,
-                  заполните форму ниже:
+                <p className="text-muted mb-6">
+                  {t(
+                    "feedback_text",
+                    "Если у вас остались вопросы, предложения или вы хотите сделать запрос на расчет стоимости, пожалуйста, заполните форму ниже, и мы свяжемся с вами в ближайшее время."
+                  )}
                 </p>
-                {/* Вставляем компонент формы */}
                 <ContactForm />
               </div>
             </div>
 
             {/* Правая колонка: Карта */}
-            <div className="h-[400px] md:h-[500px] lg:h-full w-full min-h-[400px] rounded-lg overflow-hidden shadow-md sticky top-24">
-              {" "}
-              {/* Добавил sticky для карты */}
-              {/* Убедимся что компонент карты импортирован и используется */}
+            <div className="h-[400px] md:h-[500px] lg:h-full w-full min-h-[400px] rounded-lg overflow-hidden shadow-lg sticky top-24 border border-base-300">
               <YandexMap
-                center={contactInfo.mapCenter} // Передаем координаты центра
-                placemark={contactInfo.placemarkCoords} // Передаем координаты метки
-                zoom={16} // Оптимальный зум для адреса
-                mapHeight="100%" // Карта должна заполнить контейнер по высоте
+                center={contactData.mapCenter}
+                placemark={contactData.placemarkCoords}
+                zoom={16}
+                mapHeight="100%"
               />
             </div>
           </div>

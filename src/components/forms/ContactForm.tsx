@@ -1,71 +1,127 @@
-// src/components/forms/ContactForm.tsx
-"use client"; // Форма интерактивна
+// src/components/forms/ContactForm.tsx [Перепроверенный]
+"use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useLocale } from "@/context/LocaleContext";
+import { AbstractIntlMessages } from "next-intl";
 
-// Схема Zod должна совпадать со схемой в API Route!
-const contactFormSchema = z.object({
-  name: z.string().min(2, { message: "Минимум 2 символа" }),
-  email: z.string().email({ message: "Некорректный email" }),
-  phone: z.string().optional(),
-  message: z.string().min(10, { message: "Минимум 10 символов" }),
-});
+// --- Функция getTranslation (Импортируем или определяем здесь) ---
+const getTranslation = (
+  messages: AbstractIntlMessages,
+  ns: string,
+  key: string,
+  fb: string
+): string => {
+  if (typeof messages === "object" && messages !== null && messages[ns]) {
+    const nsMessages = messages[ns] as AbstractIntlMessages;
+    const keys = key.split(".");
+    let current: unknown = nsMessages;
+    for (const k of keys) {
+      if (current && typeof current === "object" && k in current) {
+        current = (current as Record<string, unknown>)[k];
+      } else {
+        current = undefined;
+        break;
+      }
+    }
+    if (typeof current === "string" && current.trim() !== "") return current;
+  }
+  return fb;
+};
 
-// Определяем тип данных формы из схемы Zod
-type ContactFormInputs = z.infer<typeof contactFormSchema>;
-
+// --- Компонент Формы ---
 const ContactForm: React.FC = () => {
+  const { messages } = useLocale();
+
+  // --- Функция перевода для формы (мемоизированная) ---
+  const t = useCallback(
+    (key: string, fallback: string) =>
+      getTranslation(messages, "ContactForm", key, fallback),
+    [messages]
+  ); // Зависимость от messages
+
+  // --- СХЕМА ВАЛИДАЦИИ Zod с Переводами ---
+  const contactFormSchema = useMemo(
+    () =>
+      z.object({
+        name: z
+          .string()
+          .min(2, { message: t("validation_name_min", "Минимум 2 символа") }),
+        email: z.string().email({
+          message: t("validation_email_invalid", "Некорректный email"),
+        }),
+        phone: z.string().optional(),
+        message: z.string().min(10, {
+          message: t("validation_message_min", "Минимум 10 символов"),
+        }),
+      }),
+    [t]
+  ); // Зависимость от мемоизированной t
+
+  type ContactFormInputs = z.infer<typeof contactFormSchema>;
+
+  // Состояния
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formMessage, setFormMessage] = useState<string | null>(null);
   const [isError, setIsError] = useState<boolean>(false);
 
+  // React Hook Form
   const {
     register,
     handleSubmit,
-    reset, // Функция для сброса формы
-    formState: { errors }, // Получаем ошибки валидации
+    reset,
+    formState: { errors },
   } = useForm<ContactFormInputs>({
-    resolver: zodResolver(contactFormSchema), // Используем резолвер Zod
+    resolver: zodResolver(contactFormSchema),
+    mode: "onBlur",
   });
 
-  // Обработчик отправки формы
+  // Обработчик отправки
   const onSubmit: SubmitHandler<ContactFormInputs> = async (data) => {
     setIsLoading(true);
     setFormMessage(null);
     setIsError(false);
-
     try {
       const response = await fetch("/api/send-email", {
-        // Отправляем на наш API Route
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-
       const result = await response.json();
 
       if (!response.ok) {
-        // Обрабатываем ошибки валидации с сервера или другие ошибки
-        const errorMessage = result.errors
-          ? Object.values(result.errors).flat().join(", ") // Собираем ошибки валидации Zod
-          : result.message || "Произошла ошибка при отправке.";
-        throw new Error(errorMessage);
+        // Обработка ошибок валидации с сервера или других ошибок
+        let serverErrorMessage = t(
+          "error_submit_generic",
+          "Ошибка при отправке формы."
+        ); // Дефолтная ошибка
+        if (result.errors && typeof result.errors === "object") {
+          // Собираем ошибки валидации Zod с сервера (если они есть)
+          serverErrorMessage =
+            Object.values(result.errors).flat().join(". ") + ".";
+        } else if (result.message && typeof result.message === "string") {
+          // Используем сообщение об ошибке от сервера (например, от Resend)
+          serverErrorMessage = result.message;
+        }
+        throw new Error(serverErrorMessage);
       }
 
-      // Успех
-      setFormMessage("Ваше сообщение успешно отправлено!");
+      setFormMessage(
+        t("success_message", "Ваше сообщение успешно отправлено!")
+      );
       setIsError(false);
       reset(); // Очищаем форму
     } catch (error: unknown) {
       console.error("Form submission error:", error);
       setIsError(true);
+      // Показываем сообщение из объекта Error или общую ошибку
       setFormMessage(
-        error instanceof Error ? error.message : "Произошла ошибка."
+        error instanceof Error
+          ? error.message
+          : t("error_submit_generic", "Произошла ошибка.")
       );
     } finally {
       setIsLoading(false);
@@ -73,23 +129,23 @@ const ContactForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       {/* Поле Имя */}
       <div>
         <label
           htmlFor="name"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-base-content mb-1"
         >
-          Имя <span className="text-red-600">*</span>
+          {t("label_name", "Имя")} <span className="text-error">*</span>
         </label>
         <input
           type="text"
           id="name"
           {...register("name")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary ${errors.name ? "border-red-500" : "border-gray-300"}`}
+          className={`input-field ${errors.name ? "border-error focus:border-error focus:ring-error" : "border-base-300"}`}
         />
         {errors.name && (
-          <p className="text-red-600 text-xs mt-1">{errors.name.message}</p>
+          <p className="text-error text-xs mt-1">{errors.name.message}</p>
         )}
       </div>
 
@@ -97,34 +153,34 @@ const ContactForm: React.FC = () => {
       <div>
         <label
           htmlFor="email"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-base-content mb-1"
         >
-          Email <span className="text-red-600">*</span>
+          {t("label_email", "Email")} <span className="text-error">*</span>
         </label>
         <input
           type="email"
           id="email"
           {...register("email")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary ${errors.email ? "border-red-500" : "border-gray-300"}`}
+          className={`input-field ${errors.email ? "border-error focus:border-error focus:ring-error" : "border-base-300"}`}
         />
         {errors.email && (
-          <p className="text-red-600 text-xs mt-1">{errors.email.message}</p>
+          <p className="text-error text-xs mt-1">{errors.email.message}</p>
         )}
       </div>
 
-      {/* Поле Телефон (необязательное) */}
+      {/* Поле Телефон */}
       <div>
         <label
           htmlFor="phone"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-base-content mb-1"
         >
-          Телефон
+          {t("label_phone", "Телефон")}
         </label>
         <input
           type="tel"
           id="phone"
           {...register("phone")}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+          className="input-field border-base-300"
         />
       </div>
 
@@ -132,40 +188,51 @@ const ContactForm: React.FC = () => {
       <div>
         <label
           htmlFor="message"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-base-content mb-1"
         >
-          Сообщение <span className="text-red-600">*</span>
+          {t("label_message", "Сообщение")}{" "}
+          <span className="text-error">*</span>
         </label>
         <textarea
           id="message"
-          rows={4}
+          rows={5}
           {...register("message")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary ${errors.message ? "border-red-500" : "border-gray-300"}`}
+          className={`input-field h-auto ${errors.message ? "border-error focus:border-error focus:ring-error" : "border-base-300"}`}
         />
         {errors.message && (
-          <p className="text-red-600 text-xs mt-1">{errors.message.message}</p>
+          <p className="text-error text-xs mt-1">{errors.message.message}</p>
         )}
       </div>
 
-      {/* Кнопка Отправки и Сообщения */}
+      {/* Кнопка и Сообщения */}
       <div>
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out"
+          className="btn btn-primary w-full"
         >
-          {isLoading ? "Отправка..." : "Отправить сообщение"}
+          {isLoading
+            ? t("button_sending", "Отправка...")
+            : t("button_submit", "Отправить сообщение")}
         </button>
       </div>
-
-      {/* Отображение сообщения об успехе или ошибке */}
       {formMessage && (
         <div
-          className={`mt-4 text-center p-3 rounded-md ${isError ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}
+          className={`mt-4 text-center p-3 rounded-md text-sm ${isError ? "bg-error/10 text-error" : "bg-success/10 text-success"}`}
         >
           {formMessage}
         </div>
       )}
+
+      {/* Общий класс для полей ввода */}
+      <style jsx>{`
+        .input-field {
+          @apply block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-base-content bg-base-100 transition duration-150 ease-in-out;
+        }
+        .input-field.border-error {
+          @apply border-error focus:ring-error focus:border-error;
+        }
+      `}</style>
     </form>
   );
 };

@@ -1,178 +1,242 @@
-// src/components/layout/Footer.tsx
-"use client"; // Компонент содержит клиентские виджеты и Link
+// src/components/layout/Footer.tsx [ФИНАЛЬНАЯ ИСПРАВЛЕННАЯ ВЕРСИЯ]
+"use client";
 
-import Link from "next/link"; // Используется в навигации и ссылке на логистику
-import Image from "next/image"; // Используется для мини-карты
-import QuotesWidget from "@/components/widgets/QuotesWidget"; // Импорт виджета котировок
+import Link from "next/link";
+import Image from "next/image";
+import QuotesWidget from "@/components/widgets/QuotesWidget";
+import { useLocale } from "@/context/LocaleContext"; // Наш хук
+import { AbstractIntlMessages } from "next-intl"; // Тип
+
+// --- Функция getTranslation (убедитесь, что она верная) ---
+const getTranslation = (
+  messages: AbstractIntlMessages,
+  ns: string,
+  key: string,
+  fb: string
+): string => {
+  if (typeof messages === "object" && messages !== null && messages[ns]) {
+    const nsMessages = messages[ns] as AbstractIntlMessages;
+    // Обработка простых и вложенных ключей
+    const keys = key.split(".");
+    let current: unknown = nsMessages;
+    for (const k of keys) {
+      if (current && typeof current === "object" && k in current) {
+        current = (current as Record<string, unknown>)[k];
+      } else {
+        current = undefined;
+        break;
+      }
+    }
+    if (typeof current === "string" && current.trim() !== "") return current;
+  }
+  // console.warn(`Translation missing for: ${ns}.${key}`); // Для отладки
+  return fb;
+};
 
 const Footer = () => {
-  // Используется в копирайте
   const currentYear = new Date().getFullYear();
+  const { messages } = useLocale();
+
+  // Переводы для футера (используем неймспейс 'Footer')
+  const t = (key: string, fallback: string) =>
+    getTranslation(messages, "Footer", key, fallback);
+  // Переводы для навигации (используем неймспейс 'Navigation')
+  const tNav = (
+    key: "about" | "products" | "logistics" | "clients" | "contacts",
+    fallback: string
+  ) => getTranslation(messages, "Navigation", key, fallback);
+
+  // Статичные контакты (TODO: заменить)
+  const staticAddress = "Город, Улица, Дом";
+  const staticPhone = "+7 (123) 456-78-90";
+  const staticPhoneLink = "tel:+71234567890";
+  const staticEmail = "info@example.com";
 
   return (
-    // Общая обертка для виджетов и футера
-    <div className="bg-gray-100">
-      {/* ----- Секция виджетов ----- */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-          {" "}
-          {/* items-start чтобы колонки были одной высоты */}
+    // Фон секции виджетов и рамка сверху
+    <div className="bg-base-200 border-t border-base-300">
+      {/* Секция виджетов */}
+      <div className="container mx-auto px-4 py-10">
+        {" "}
+        {/* Увеличил отступ */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
           {/* Виджет котировок */}
           <QuotesWidget />
-          {/* Виджет с мини-картой */}
-          <div className="bg-white p-4 rounded shadow h-full flex flex-col">
+
+          {/* Виджет с картой */}
+          <div className="bg-white p-4 rounded-lg shadow h-full flex flex-col">
             {" "}
-            {/* h-full и flex чтобы ссылка была внизу */}
-            <h4 className="font-semibold text-brand-dark mb-2">
-              География поставок
+            {/* Добавил rounded-lg */}
+            <h4 className="font-semibold text-base-content mb-2">
+              {t("logistics_widget_title", "География поставок")}
             </h4>
-            <p className="text-sm text-gray-500 mb-3">
-              Осуществляем поставки по РФ и странам ближнего зарубежья.
+            <p className="text-sm text-muted mb-3">
+              {t(
+                "logistics_widget_text",
+                "Осуществляем поставки по РФ и странам ближнего зарубежья."
+              )}
             </p>
-            {/* Контейнер для изображения карты */}
-            <div className="relative h-24 md:h-32 w-full rounded overflow-hidden border flex-grow">
-              {" "}
-              {/* flex-grow чтобы карта занимала место */}
+            <div className="relative h-24 md:h-32 w-full rounded overflow-hidden border border-base-200 flex-grow">
               <Image
-                src="/images/map.jpg" // Убедитесь, что путь верный
-                alt="Карта поставок"
-                layout="fill"
-                objectFit="cover" // или 'contain'
+                src="/images/map.jpg"
+                alt={t("map_alt_text", "Карта поставок")}
+                fill
+                style={{ objectFit: "cover" }}
                 className="rounded"
+                quality={75}
               />
             </div>
-            {/* Ссылка на страницу логистики */}
-            <div className="text-right mt-2 pt-2 border-t border-gray-200">
+            <div className="text-right mt-3 pt-3 border-t border-base-200">
               {" "}
-              {/* Отделяем ссылку линией */}
+              {/* Увеличил отступы */}
               <Link
                 href="/logistics"
-                className="text-primary hover:underline text-sm font-medium"
+                className="text-primary hover:text-primary-focus text-sm font-medium transition-colors duration-200"
               >
-                Подробнее о логистике →
+                {t("logistics_widget_link", "Подробнее →")}
               </Link>
             </div>
           </div>
-          {/* Конец виджета с мини-картой */}
         </div>
       </div>
-      {/* ----- Конец Секции виджетов ----- */}
 
-      {/* ----- Основной футер ----- */}
-      <footer className="bg-brand-dark text-gray-300 pt-10 pb-6">
+      {/* Основной футер */}
+      <footer className="bg-brand-dark text-gray-400 pt-12 pb-8">
+        {" "}
+        {/* Базовый цвет текста чуть темнее (400) */}
         <div className="container mx-auto px-4">
-          {/* ----- Содержимое футера ----- */}
           <div className="flex flex-wrap text-left lg:text-left">
-            {/* Секция 1: О компании (кратко) */}
-            <div className="w-full lg:w-5/12 px-4 mb-6 lg:mb-0">
+            {/* Секция 1: О компании */}
+            <div className="w-full lg:w-5/12 px-4 mb-8 lg:mb-0">
+              {" "}
+              {/* Увеличил mb */}
               <h4 className="text-xl font-heading font-semibold text-white mb-3">
-                Название Компании {/* TODO: Заменить */}
+                {t("company_name", "Аргойл")}
               </h4>
-              <p className="text-sm text-gray-400 mb-4">
-                Надежный поставщик сжиженного газа и нефтепродуктов.
-                {/* TODO: Заменить на краткий слоган или описание */}
+              <p className="text-sm text-gray-400 mb-4 leading-relaxed">
+                {" "}
+                {/* Добавил leading-relaxed */}
+                {t(
+                  "company_slogan",
+                  "Надежный поставщик сжиженного газа и нефтепродуктов, обеспечивающий стабильность вашего бизнеса."
+                )}
               </p>
-              {/* Можно добавить логотип в футер */}
-              {/* <Link href="/" className="inline-block mb-4">
-                 <img src="/logo-white.svg" alt="Лого" className="h-8"/>
-               </Link> */}
             </div>
 
             {/* Секция 2: Навигация */}
-            <div className="w-full lg:w-3/12 px-4 mb-6 lg:mb-0">
-              <span className="block uppercase text-white text-sm font-semibold mb-3">
-                Навигация
+            <div className="w-full lg:w-3/12 px-4 mb-8 lg:mb-0">
+              <span className="block uppercase text-white text-sm font-semibold tracking-wider mb-4">
+                {" "}
+                {/* Добавил трекинг */}
+                {t("nav_title", "Навигация")}
               </span>
               <ul className="list-unstyled space-y-2">
+                {/* --- ИСПРАВЛЕНЫ СТИЛИ ДЛЯ LINK --- */}
                 <li>
                   <Link
                     href="/about"
-                    className="text-gray-400 hover:text-white transition-colors text-sm"
+                    className="text-gray-300 hover:text-white transition-colors duration-200 text-sm pb-1 inline-block"
                   >
-                    О компании
+                    {tNav("about", "О компании")}
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/products"
-                    className="text-gray-400 hover:text-white transition-colors text-sm"
+                    className="text-gray-300 hover:text-white transition-colors duration-200 text-sm pb-1 inline-block"
                   >
-                    Продукция
+                    {tNav("products", "Продукция")}
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/logistics"
-                    className="text-gray-400 hover:text-white transition-colors text-sm"
+                    className="text-gray-300 hover:text-white transition-colors duration-200 text-sm pb-1 inline-block"
                   >
-                    Логистика
+                    {tNav("logistics", "Логистика")}
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/clients"
-                    className="text-gray-400 hover:text-white transition-colors text-sm"
+                    className="text-gray-300 hover:text-white transition-colors duration-200 text-sm pb-1 inline-block"
                   >
-                    Клиентам
+                    {tNav("clients", "Клиентам")}
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/contacts"
-                    className="text-gray-400 hover:text-white transition-colors text-sm"
+                    className="text-gray-300 hover:text-white transition-colors duration-200 text-sm pb-1 inline-block"
                   >
-                    Контакты
+                    {tNav("contacts", "Контакты")}
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Секция 3: Контакты (кратко) */}
+            {/* Секция 3: Контакты */}
             <div className="w-full lg:w-4/12 px-4">
-              <span className="block uppercase text-white text-sm font-semibold mb-3">
-                Контакты
+              <span className="block uppercase text-white text-sm font-semibold tracking-wider mb-4">
+                {t("contacts_title", "Контакты")}
               </span>
-              <ul className="list-unstyled space-y-2 text-sm">
-                {/* TODO: Заменить на реальные данные */}
-                <li className="text-gray-400 ">Адрес: Город, Улица, Дом</li>
-                <li className="text-gray-400 ">
-                  Телефон:{" "}
-                  <a
-                    href="tel:+71234567890"
-                    className="hover:text-white transition-colors"
-                  >
-                    +7 (123) 456-78-90
-                  </a>
+              <ul className="list-unstyled space-y-3 text-sm">
+                {" "}
+                {/* Увеличил space-y */}
+                <li className="text-gray-400 flex items-start">
+                  <span className="inline-block w-5 mr-2 mt-0.5 text-gray-500">
+                    {" "}
+                    {/* Иконка-плейсхолдер */}📍
+                  </span>
+                  <span>
+                    {t("address_label", "Адрес")}: {staticAddress}
+                  </span>
                 </li>
-                <li className="text-gray-400 ">
-                  Email:{" "}
-                  <a
-                    href="mailto:info@example.com"
-                    className="hover:text-white transition-colors"
-                  >
-                    info@example.com
-                  </a>
+                <li className="text-gray-400 flex items-center">
+                  <span className="inline-block w-5 mr-2 text-gray-500">
+                    📞
+                  </span>
+                  <span>
+                    {t("phone_label", "Телефон")}:{" "}
+                    <a
+                      href={staticPhoneLink}
+                      className="text-gray-300 hover:text-white transition-colors"
+                    >
+                      {staticPhone}
+                    </a>
+                  </span>
+                </li>
+                <li className="text-gray-400 flex items-center">
+                  <span className="inline-block w-5 mr-2 text-gray-500">
+                    ✉️
+                  </span>
+                  <span>
+                    {t("email_label", "Email")}:{" "}
+                    <a
+                      href={`mailto:${staticEmail}`}
+                      className="text-gray-300 hover:text-white transition-colors"
+                    >
+                      {staticEmail}
+                    </a>
+                  </span>
                 </li>
               </ul>
             </div>
           </div>
-          {/* ----- Конец Содержимого футера ----- */}
-
-          {/* Разделитель и копирайт */}
-          <hr className="my-6 border-gray-700" />
+          {/* Копирайт */}
+          <hr className="my-8 border-gray-700" /> {/* Увеличил отступ */}
           <div className="flex flex-wrap items-center md:justify-between justify-center">
             <div className="w-full px-4 mx-auto text-center">
               <div className="text-sm text-gray-500 font-light py-1">
-                © {currentYear} Название Компании. Все права защищены.
-                {/* TODO: Заменить Название Компании */}
+                © {currentYear} {t("company_name", "Аргойл")}.{" "}
+                {t("copyright", "Все права защищены")}.
               </div>
             </div>
           </div>
         </div>
       </footer>
-      {/* ----- Конец Основного футера ----- */}
-    </div> // Закрываем общую обертку
+    </div>
   );
 };
 
-export default Footer; // Экспорт по умолчанию
+export default Footer;

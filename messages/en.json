@@ -1,0 +1,241 @@
+{
+  "AboutPage": {
+    "meta_title": "About Argoil",
+    "meta_description": "Information about Argoil: mission, values, advantages of working with a reliable supplier of LPG and gas.",
+    "main_title": "About «{companyName}»",
+    "image_alt": "Company office or production facility",
+    "description_p1": "«{companyName}» is your reliable and responsible supplier of liquefied petroleum gases (LPG) in the Russian Federation and CIS countries. Since our foundation, we have established ourselves as a stable partner for industrial enterprises, agricultural holdings, and gas station networks, ensuring uninterrupted supplies of quality fuel.",
+    "description_p2": "Our mission is to contribute to the energy stability and efficiency of our partners' businesses by offering the best solutions in gas and petroleum product supplies. We pride ourselves on our reputation, built on years of experience, team professionalism, honesty, and an individual approach to each client's needs.",
+    "description_p3": "Key areas of our activity include wholesale supplies of technical propane (PT), technical butane (BT), their mixtures (SPBT), propane-butane automotive (PBA), as well as other related products of the oil and gas industry.",
+    "advantages_title": "Our Advantages",
+    "advantages_subtitle": "Working with us, you get not only a quality product, but also a number of significant advantages:",
+    "advantages": {
+      "1": {
+        "title": "Quality Guarantee",
+        "text": "Strict quality control of supplied products at all stages, ensuring compliance with GOST and TU standards."
+      },
+      "2": {
+        "title": "Supply Reliability",
+        "text": "Adherence to deadlines and volumes thanks to well-established logistics and our own reserves."
+      },
+      "3": {
+        "title": "Own Transport",
+        "text": "A modern fleet of specialized gas carriers ensures flexibility and prompt delivery."
+      },
+      "4": {
+        "title": "Flexible Conditions",
+        "text": "Individual approach to each client and partner, selection of optimal payment and delivery terms."
+      }
+    }
+  },
+
+  "LogisticsPage": {
+    "page_title": "Logistics and Supply",
+    "page_subtitle": "We ensure timely and safe gas delivery throughout Russia and the CIS countries, using modern transport and optimal routes.",
+    "geography_title": "Our Supply Geography",
+    "geography_p1": "We have an extensive logistics network covering more than 70 regions of the Russian Federation, as well as neighboring countries, including Kazakhstan, Belarus, and others. This allows us to quickly respond to customer requests from various locations.",
+    "geography_p2": "Our specialists select the optimal route and mode of transport for each order, considering the volume, distance, and delivery time requirements. We guarantee compliance with all safety regulations for the transportation of dangerous goods, confirmed by relevant licenses and permits.",
+    "transport_title": "Types of Transport Used:",
+    "transport_item1": "Road gas carriers of various capacities (from 5 to 40 tons) for flexible 'door-to-door' delivery.",
+    "transport_item2": "Railway tank cars for LPG for economical transportation of large batches over long distances.",
+    "transport_item3": "Possibility of organizing multimodal transportation using several types of transport for complex routes.",
+    "map_alt": "Argoil Supply Map",
+    "advantages_title": "Advantages of Our Logistics",
+    "advantages": {
+      "1": {
+        "title": "Timeliness",
+        "text": "Precise logistics planning and constant monitoring of transport movement allow us to strictly adhere to agreed delivery schedules."
+      },
+      "2": {
+        "title": "Safety",
+        "text": "All transport complies with ADR requirements. Drivers have the necessary permits and regularly undergo safety training for transporting dangerous goods."
+      },
+      "3": {
+        "title": "Flexibility",
+        "text": "Individual approach to building the logistics chain, selecting the optimal type of transport and route depending on the client's needs."
+      }
+    },
+    "cta_title": "Need a Delivery Consultation?",
+    "cta_subtitle": "Our managers are ready to answer your questions and calculate the exact cost and delivery time of gas to your facility.",
+    "cta_button": "Contact Us"
+  },
+  "ClientsPage": {
+    "page_title": "To Clients and Partners",
+    "page_subtitle": "All the necessary information for a comfortable and productive start and continuation of cooperation with our company.",
+    "how-to-start": "How to Become a Client?",
+    "how-to-start_p1": "Starting cooperation with us is simple. We work with both legal entities and individual entrepreneurs, offering transparent and understandable conditions. The main steps to get started:",
+    "how-to-start_step1": "Submit an application through the contact form on the 'Contacts' page or contact our sales department directly via the provided phone numbers or email.",
+    "how-to-start_step2": "Our qualified manager will promptly contact you to clarify your needs: required gas volumes, necessary delivery schedule, exact location of your facility.",
+    "how-to-start_step3": "Based on the information received, we will prepare an individual commercial offer for you with competitive prices and optimal delivery terms.",
+    "how-to-start_step4": "After agreeing on all terms and details, we conclude an official supply agreement that guarantees legal clarity and reliability of the transaction.",
+    "how-to-start_step5": "You receive the ordered volumes of quality gas exactly on the agreed dates according to the approved schedule!",
+    "how-to-start_p2": "To conclude the agreement, legal entities will need to provide a standard package of constituent documents, and individual entrepreneurs – passport data, TIN, and OGRNIP.",
+    "delivery-terms": "Supply Conditions",
+    "delivery-terms_p1": "We strive to offer the most flexible and convenient gas supply conditions that meet the specifics of your business:",
+    "delivery-terms_item1": "The minimum order volume is [Specify volume, e.g., 5 tons] for road deliveries and [Specify volume, e.g., 1 rail tank car] for railway deliveries.",
+    "delivery-terms_item2": "Delivery geography covers all of Russia and CIS countries. Details can be found in the ",
+    "delivery-terms_item2_link": "Logistics",
+    "delivery-terms_item2_end": " section.",
+    "delivery-terms_item3": "We use our own and contracted specialized transport: modern road gas carriers and railway tanks that meet all safety requirements.",
+    "delivery-terms_item4": "Payment terms are discussed individually. We offer various options: 100% prepayment, partial prepayment, as well as the possibility of deferred payment for our regular and reliable partners.",
+    "delivery-terms_item5": "Standard delivery times range from [X] to [Y] working days from the moment the application is confirmed and depend on the delivery region and ordered volume.",
+    "contracts": "Standard Contracts",
+    "contracts_p1": "For your convenience and preliminary review, we provide samples of our standard liquefied petroleum gas supply contracts.",
+    "contracts_p2": "Please note that the final version of the contract may be supplemented or amended based on individual agreements reached between you and your personal manager in our company.",
+    "contract_link_legal": "Download standard contract for legal entities (.pdf)",
+    "contract_link_ip": "Download standard contract for sole proprietors (.pdf)",
+    "quality": "Product Quality Standards",
+    "quality_p1": "We guarantee the highest quality of all supplied products. Each type of gas complies with the current GOST standards and TU of the Russian Federation.",
+    "quality_link_text_part1": "Detailed information about specific standards and certificates of conformity for the product you are interested in can be found in the ",
+    "quality_link_text_part2": "Products",
+    "quality_link_text_part3": " section or requested directly from your personal manager.",
+    "cabinet_link_text": "Client Area (soon)"
+  },
+  "ContactsPage": {
+    "page_title": "Contacts",
+    "page_subtitle": "We are always in touch! Contact us in any convenient way or visit our office.",
+    "coordinates_title": "Our Coordinates",
+    "address_label": "Address",
+    "phone_label": "Phone",
+    "email_label": "Email",
+    "hours_label": "Working Hours",
+    "feedback_title": "Feedback",
+    "feedback_text": "If you have any questions, suggestions, or would like to request a price calculation, please fill out the form below, and we will contact you shortly."
+  },
+  "Footer": {
+    "company_name": "Argoil",
+    "company_slogan": "Reliable supplier of LPG and petroleum products.",
+    "nav_title": "Navigation",
+    "contacts_title": "Contacts",
+    "address_label": "Address",
+    "phone_label": "Phone",
+    "email_label": "Email",
+    "copyright": "All rights reserved",
+    "logistics_widget_title": "Supply Geography",
+    "logistics_widget_text": "We deliver across the Russian Federation and neighboring countries.",
+    "logistics_widget_link": "Details →",
+    "map_alt_text": "Supply Map"
+  },
+  "Navigation": {
+    "about": "About Us",
+    "products": "Products",
+    "logistics": "Logistics",
+    "clients": "Clients/Partners",
+    "contacts": "Contacts"
+  },
+  "QuotesWidget": {
+    "widget_title": "Quotes & Currencies",
+    "loading": "Loading...",
+    "loading_dots": "...",
+    "error_loading_rates": "Failed to load rates",
+    "error_loading_generic": "Failed to load data",
+    "error_quote": "Error",
+    "usd": "USD/RUB",
+    "eur": "EUR/RUB",
+    "brent": "Brent Crude"
+  },
+  "ClientsPartnersSection": {
+    "main_title": "To Clients and Partners",
+    "subtitle": "We value every partner and strive to make cooperation as convenient and beneficial as possible. Learn more about our terms and capabilities."
+  },
+  "LogisticsSection": {
+    "section_title": "Logistics and Supply",
+    "main_title": "Flexible and reliable delivery across the territory",
+    "description_p1": "With our own and partner fleet of specialized vehicles, we ensure timely and safe gas delivery anywhere in Russia and neighboring countries.",
+    "description_p2": "Our logistics service operates around the clock to guarantee on-time deliveries, adhering to all safety norms and standards.",
+    "features_list_title": "Key Advantages:",
+    "feature_1": "Delivery by tank trucks and rail transport.",
+    "feature_2": "Adherence to delivery schedules.",
+    "feature_3": "Quality control at all stages.",
+    "feature_4": "Optimal logistics routes.",
+    "button_more": "More about logistics",
+    "map_alt": "Gas supply map"
+  },
+  "ProductsSection": {
+    "section_title": "Our Products",
+    "main_title": "Main Types of Supplied Gas",
+    "product_details_link": "Details →",
+    "all_products_button": "View All Products"
+  },
+  "ProductsPage": {
+    "page_title": "Our Products",
+    "page_subtitle": "We offer a wide range of high-quality liquefied gases for various needs, meeting the strictest GOST standards.",
+    "features_title": "Key features:",
+    "request_price_btn": "Request Price",
+    "cta_title": "Ready to Discuss Supplies?",
+    "cta_subtitle": "Contact our sales department for a consultation and a personalized commercial offer tailored to your needs.",
+    "cta_button": "Request Offer",
+    "photo_placeholder": "Product photo",
+    "sug": {
+      "name": "Liquefied Petroleum Gas (LPG)",
+      "shortDescription": "Propane-Butane Mixture (SPBT), GOST 20448-90. Universal and economical fuel.",
+      "description": "A universal and economical fuel for domestic consumption (heating, cooking), use as autogas for vehicles (LPG), and various industrial and agricultural needs (grain drying, metal cutting, etc.). Supplied as a mixture of propane and butane in various percentages depending on climatic conditions and customer requirements.",
+      "features": "High calorific value|Eco-friendliness (low CO2 emissions)|Convenient transportation and storage|Wide range of applications"
+    },
+    "propan": {
+      "name": "Technical Propane (PT)",
+      "shortDescription": "GOST R 52087-2018. High purity, suitable for low temperatures.",
+      "description": "Pure propane (main substance content not less than 98%) with high calorific value. Ideal for high-precision gas flame processing of metals (welding, cutting, brazing of ferrous and non-ferrous metals), autonomous heating of industrial and residential facilities, and also used as an environmentally friendly refrigerant and propellant in aerosol products.",
+      "features": "High product purity (min. 98%)|Stable and efficient combustion|Excellent vaporization at low temperatures|Use in precision industrial processes"
+    },
+    "butan": {
+      "name": "Technical Butane (BT)",
+      "shortDescription": "GOST R 52087-2018 (component). Feedstock for petrochemistry.",
+      "description": "Used primarily as a valuable raw material in the petrochemical industry for the synthesis of butadiene, the main monomer for the production of synthetic rubbers. Also used as a component of liquefied petroleum gases (LPG), gasolines, and as a propellant in household aerosols.",
+      "features": "Important petrochemical feedstock|Component of fuel mixtures|Use as a propellant|Higher boiling point"
+    },
+    "pba": {
+      "name": "Propane-Butane Automotive (PBA)",
+      "shortDescription": "Fuel for LPG vehicles, GOST R 52087-2018. Economy and ecology.",
+      "description": "A specially prepared and purified mixture of propane and butane, optimized for stable and efficient operation of internal combustion engines converted to use gas fuel (LPG). Provides economical operation and reduction of harmful emissions into the atmosphere.",
+      "features": "High octane number (100-110)|Reduced engine wear|Reduction of harmful emissions|Significant fuel savings"
+    }
+  },
+  "AboutSection": {
+    "section_title": "About Us",
+    "main_title": "Your strategic partner in gas supply",
+    "description_p1": "We specialize in wholesale supplies of liquefied petroleum gas (LPG), propane, butane, and their mixtures to enterprises throughout Russia and neighboring countries.",
+    "description_p2": "Years of experience and well-established logistics allow us to guarantee stability and timeliness of deliveries.",
+    "button_more": "Learn More",
+    "key_figures_title": "Key Figures",
+    "key_figure_years": "Years in market",
+    "key_figure_regions": "Regions of RF",
+    "key_figure_partners": "Partners",
+    "key_figure_support": "Support"
+  },
+  "ContactForm": {
+    "label_name": "Name",
+    "label_email": "Email",
+    "label_phone": "Phone",
+    "label_message": "Message",
+    "button_sending": "Sending...",
+    "button_submit": "Send Message",
+    "success_message": "Your message has been sent successfully!",
+    "error_submit_generic": "An error occurred. Please try again.",
+    "validation_name_min": "Minimum 2 characters",
+    "validation_email_invalid": "Invalid email address",
+    "validation_message_min": "Minimum 10 characters"
+  },
+  "advantages": {
+    "1": {
+      "title": "Timeliness",
+      "text": "Precise logistics planning and constant monitoring of transport movement allow us to strictly adhere to agreed delivery schedules."
+    },
+    "2": {
+      "title": "Safety",
+      "text": "All transport complies with ADR requirements. Drivers have the necessary permits and regularly undergo safety training for transporting dangerous goods."
+    },
+    "3": {
+      "title": "Flexibility",
+      "text": "Individual approach to building the logistics chain, selecting the optimal type of transport and route depending on the client's needs."
+    }
+  },
+  "Hero": {
+    "title_line1": "Reliable gas supplies",
+    "title_line2": "across Russia and the CIS",
+    "subtitle": "Ensuring stability and efficiency for your business through the supply of high-quality liquefied petroleum gases and well-planned logistics throughout the Russian Federation and neighboring countries.",
+    "button_products": "Our Products",
+    "button_contact": "Contact Us",
+    "background_alt": "Hero section background - Gas infrastructure"
+  }
+}
