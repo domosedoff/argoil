@@ -1,7 +1,7 @@
 
 # public/robots.txt
 User-agent: *
-Allow: /
+Disallow: /
 
 # Запретить индексацию служебных папок Next.js (на всякий случай)
 Disallow: /_next/
